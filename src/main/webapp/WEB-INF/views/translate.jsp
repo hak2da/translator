@@ -36,7 +36,7 @@
 	
 	<div id="textarea1" class="container">
 	
-	<textarea rows="15" cols="30" name="contents">기본값은 여기에 적어줍니다.hello1</textarea>
+	<textarea rows="15" cols="30" name="contents">기본값은 여기에 적어줍니다.hello11</textarea>
 	</div>
 	
 	<div id="three-column" class="container">
