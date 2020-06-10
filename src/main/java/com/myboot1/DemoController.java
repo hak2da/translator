@@ -3,16 +3,17 @@ package com.myboot1;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class DemoController {
-	@ResponseBody
+//	@ResponseBody
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
+	
 	@RequestMapping("/")
 	public String home() {
-		
-		System.out.println("bbot");
-		return "hello boot";
+		return "translate";
 	}
 	
 	@RequestMapping("/hello.do")

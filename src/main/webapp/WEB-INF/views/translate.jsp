@@ -13,8 +13,12 @@
 <title>Glissade by TEMPLATED</title>
 <link href="http://fonts.googleapis.com/css?family=Oxygen:400,700,300" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 </head>
 <body>
+
 <div id="wrapper">
 	<div id="logo" class="container">
 		<h1><a href="#">Translator </a></h1>
@@ -25,6 +29,7 @@
 			<ul>
 				<li class="current_page_item"><a href="#">홈페이지</a></li>
 				<li><a href="#">이용약관</a></li>
+				<li><a href="#">개인정보처리방침</a></li>
 <!-- 				<li><a href="#">Blog</a></li> -->
 <!-- 				<li><a href="#">Photos</a></li> -->
 <!-- 				<li><a href="#">About Us</a></li> -->
@@ -34,11 +39,17 @@
 		</div>
 	</div>
 	
-	<div id="textarea1" class="container">
+	<div style="text-align:center" class="container" >
 	
-	<textarea rows="15" cols="30" name="contents">기본값은 여기에 적어줍니다.hello11</textarea>
+		<textarea id="textarea1" style="width:80%; left:10%; display:inline-block;" rows="15" cols="30" name="contents" placeholder="소스를 적어주세요"></textarea>
 	</div>
-	
+	<div id="buttonarea"  style="text-align:center" class="container">
+		<font style="font-size:12pt;color:black;margin:0 13px 0 13px">우리의 서비스를 이용하는것은 사용자가 <a href="#">이용약관</a>을 동의하는것으로 간주합니다</font>
+		<br>
+		<input type="button" onclick="godown()" value="다운로드 테스트"/>
+		<input type="button" onclick="gotextdown()" value="텍스트에리어 테스트"/>
+		<input type="button" onclick="goread()" value="데이터 읽기 테스트"/>
+	</div>
 	<div id="three-column" class="container">
 		<div id="tbox1">
 			<div class="box-style box-style01">
@@ -139,3 +150,93 @@
 <!-- end #footer -->
 </body>
 </html>
+<script>
+
+function goread(){ //텍스트에리어안의 데이터읽기테스트
+	var txt = document.getElementById("textarea1").value;
+	alert(txt);
+}
+
+function godown(){//다운로드 테스트
+	
+	download("test.html", "한글로 저장");
+}
+
+function gotextdown(){
+	var msg = "";
+	var date = new Date();
+	var title=moment(date).format('YY년MM월DD일 HH:mm:ss');
+	msg = contentmaking(title);
+	
+	download(title+".html", msg);
+	//download("test.html", document.getElementById("textarea1").value);
+}
+
+function contentmaking(title){
+	var body = bodymaker();
+	var head = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n"
+	+ "<title>"+title+"</title>\n" + "</head>\n" + "<body>"
+			+ "<div style=\"width:700px;padding-left:150px;padding-top:100px;padding-bottom:100px;word-break:break-all;\">";
+	var foot = "</div>\n</body>\n" + "</html>";
+	return head + body + foot;
+}
+
+function bodymaker(){
+	var body =document.getElementById("textarea1").value;
+	body=rnreplacer(body);//이건할필요없음
+	body=magnetreplacer(body);
+	body = tagadder(body);
+
+	return body;
+}
+
+function rnreplacer(body){
+	while(body.indexOf("\n\n\n")!=-1) {
+		//s =s.replaceAll("\n\n", "\n");
+		body =replaceAll(body, "\n\n\n", "\n\n");
+	}
+	return body;
+}
+
+function tagadder(body) {
+	body = replaceAll(body,"https:","<img src=\"https:");
+	body = replaceAll(body,"http:","<br><img src=\"http:");
+	body = replaceAll(body,"jpg", "jpg\"/><br>");
+	body = replaceAll(body,"png", "png\"/><br>");
+	//body = body.replaceAll("\r", "<br>");
+	//body = body.replaceAll("magnet", "<br><br>magnet");
+	return body;	
+}
+
+function replaceAll(str, searchStr, replaceStr){
+   return str.split(searchStr).join(replaceStr);
+}
+
+function magnetreplacer(body){
+	var sarr = body.split("\n");
+	var result= "";
+	for (var i = 0; i < sarr.length; i++) {
+		//if(sarr[i].contentEquals("magnet")) {
+		if(sarr[i].indexOf("magnet")!=-1) {				
+			sarr[i]="<h3><a href=\""+sarr[i]+"\">↑↑magnet</a></h3><br><br>";
+		}
+		result+=sarr[i]+"\r\n\r\n";		
+	}
+	return result;
+}
+
+function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
+</script>
